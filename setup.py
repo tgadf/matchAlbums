@@ -10,7 +10,7 @@ setup(
   author = 'Thomas Gadfort',
   author_email = 'tgadfort@gmail.com',
   license = "MIT",
-  url = 'https://github.com/tgadf/matchAlbumss',
+  url = 'https://github.com/tgadf/matchAlbums',
   keywords = ['music'],
   classifiers = [
     'Development Status :: 3',

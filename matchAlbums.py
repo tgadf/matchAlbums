@@ -2,7 +2,7 @@ from difflib import SequenceMatcher
 from searchUtils import findNearest
 
 class matchAlbums():
-    def __init__(self, name="Dummy", n=1, cutoff=0.7):
+    def __init__(self, name="Dummy", n=1, cutoff=0.7, earlyScoreCutoff=None, earlyMatchCutoff=None):
         self.name      = name
         self.minAlbums = n
         self.cutoff    = cutoff
@@ -16,6 +16,10 @@ class matchAlbums():
         self.nearest = None
         self.mapping = {}
         self.bestmap = {}
+        
+        self.earlyScoreCutoff = earlyScoreCutoff
+        self.earlyMatchCutoff = earlyMatchCutoff
+        self.earlyStop = False
         
         
     def getBestMatch(self, album):
@@ -92,7 +96,19 @@ class matchAlbums():
                     self.bestmap[albumA] = {"Name": nearest["Album"], "Code": None}
                 else:
                     self.bestmap[albumA] = {"Name": nearest["Album"], "Code": albums2map[nearest["Album"]]}
-                
+
+                    
+            ### Test for early match cutoff
+            if self.earlyMatchCutoff is not None:
+                if self.near >= self.earlyMatchCutoff:
+                    self.earlyStop = True
+                    break
+
+            ### Test for early score cutoff
+            if self.earlyScoreCutoff is not None:
+                if self.near >= self.earlyScoreCutoff:
+                    self.earlyStop = True
+                    break
         
         self.score  = round(self.score,3)
         self.thresh = round(self.thresh,3)
